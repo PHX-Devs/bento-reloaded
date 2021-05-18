@@ -3,6 +3,7 @@ modules=()
 modules+=(root_app)
 modules+=(hello_world)
 modules+=(example_api)
+modules+=(fast_api_experiment)
 # add your new module by adding a line here
 #modules+=(your_new_module_here)
 
@@ -12,6 +13,8 @@ for module_name in "${modules[@]}"
 do
     # install the nginx conf file (nginx will load /etc/nginx/default.d/*.conf by default)
     cp /var/www/modules/${module_name}/${module_name}.conf /etc/nginx/default.d/
+    # install the conf.d nginx conf file (nginx will load /etc/nginx/conf.d/*.conf by default)
+    cp /var/www/modules/${module_name}/${module_name}_conf_d.conf /etc/nginx/conf.d/${module_name}.conf
     # install the service file to the systemd dir
     cp /var/www/modules/${module_name}/${module_name}.service /etc/systemd/system/
     # reload to make systemctl see the new service

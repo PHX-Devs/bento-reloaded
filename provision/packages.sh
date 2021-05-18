@@ -5,6 +5,11 @@ dnf install -y gcc
 pip3 install uwsgi
 pip3 install migra[pg]
 pip3 install flask-restful
+
+dnf install -y python38
+pip3.8 install fastapi
+pip3.8 install hypercorn
+
 dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 dnf -qy module disable postgresql
 dnf install -y postgresql13-server
