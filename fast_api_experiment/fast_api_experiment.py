@@ -25,6 +25,10 @@ class NewEntree(BaseModel):
 class Entree(NewEntree):
     entree_id:int
 
+@app.get("/")
+async def root():
+    return {"Hello": "World"}
+
 @app.post('/entrees', response_model=Entree, status_code=201, tags=["entrees"])
 async def create_entree(entree: NewEntree):
     """
