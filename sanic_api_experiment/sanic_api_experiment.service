@@ -1,0 +1,13 @@
+[Unit]
+Description=Sanic instance for API Experiment
+After=network.target
+
+[Service]
+User=nginx
+Group=nginx
+WorkingDirectory=/var/www/modules/sanic_api_experiment
+Environment="PATH=/var/www/modules/sanic_api_experiment"
+ExecStart=/usr/bin/python3.8 sanic_api_experiment.py
+
+[Install]
+WantedBy=multi-user.target
