@@ -7,7 +7,7 @@ User=nginx
 Group=nginx
 WorkingDirectory=/var/www/modules/fast_api_experiment
 Environment="PATH=/var/www/modules/fast_api_experiment"
-ExecStart=/usr/local/bin/hypercorn fast_api_experiment.py --config fast_api_experiment.toml
+ExecStart=/usr/local/bin/hypercorn fast_api_experiment.py --reload --config fast_api_experiment.toml
 
 [Install]
 WantedBy=multi-user.target
