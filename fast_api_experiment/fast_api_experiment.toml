@@ -3,4 +3,3 @@ user       = "nginx"
 logto      = "/var/log/bento/fast_api_experiment_access.log"
 errorlog   = "/var/log/bento/fast_api_experiment_error.log"
 root_path  = "/fast_api_experiment"
-reload     = true
