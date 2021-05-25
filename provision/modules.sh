@@ -3,7 +3,6 @@ modules=()
 modules+=(root_app)
 modules+=(hello_world)
 modules+=(example_api)
-modules+=(fast_api_experiment)
 # add your new module by adding a line here
 #modules+=(your_new_module_here)
 
