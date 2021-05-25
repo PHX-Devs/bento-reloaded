@@ -8,6 +8,7 @@ pip3 install flask-restful
 # python 3.8 packages
 pip3.8 install sanic
 pip3.8 install sanic-openapi
+pip3.8 install sqlalchemy
 dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 dnf -qy module disable postgresql
 dnf install -y postgresql13-server
