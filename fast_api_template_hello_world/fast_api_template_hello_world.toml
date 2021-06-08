@@ -1,5 +1,0 @@
-bind       = "unix:/nginx_sockets/fast_api_template_hello_world.sock"
-user       = "nginx"
-logto      = "/var/log/bento/fast_api_template_hello_world_access.log"
-errorlog   = "/var/log/bento/fast_api_template_hello_world_error.log"
-root_path  = "/fast_api_template_hello_world"

@@ -1,10 +1,7 @@
 # install goodies
 dnf update -y
-dnf install -y python3-sqlalchemy python36 python3-flask nginx python3-devel python3-requests
-dnf install -y gcc
-pip3 install uwsgi
+dnf install -y nginx
 pip3 install migra[pg]
-pip3 install flask-restful
 
 dnf install -y python38
 pip3.8 install fastapi

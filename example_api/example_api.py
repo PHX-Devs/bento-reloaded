@@ -1,62 +1,85 @@
 import sys
+from typing import List, Optional
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 sys.path.append('..')
 from utils.db import simple_query, delete_row, insert_row, update_row
-from flask import Flask
-from flask_restful import reqparse, abort, Api, Resource
 
-application = Flask(__name__)
-api = Api(application)
+tags_metadata = [
+    {
+        "name": "entrees",
+        "description": "Operations with entrees.",
+    },
+]
 
-def abort_if_entree_doesnt_exist(entree_id):
-    abort(404, message="Entre {} doesn't exist".format(entree_id))
+app = FastAPI(
+    title="Bento API",
+    description="An example api built with FastAPI and Hypercorn",
+    version="1.0.0",
+    openapi_tags=tags_metadata
+)
 
-entree_name_parser = reqparse.RequestParser()
-entree_name_parser.add_argument('entree_name', trim=True, help='The name of the entree (a string). Error: {error_msg}')
+class NewEntree(BaseModel):
+    entree_name:str
 
-# Entree
-# shows a single entree item and lets you delete an entree item
-class Entree(Resource):
-    def get(self, entree_id):
-        rows = simple_query('SELECT * FROM test.entree WHERE entree_id = :entree_id', {'entree_id': entree_id})
-        if (len(rows) == 0):
-            abort(404, message="Entree {} doesn't exist".format(entree_id))
-        else:
-            return rows[0]
+class Entree(NewEntree):
+    entree_id:int
 
-    def delete(self, entree_id):
-        rowcount = delete_row('DELETE FROM test.entree WHERE entree_id = :entree_id', {'entree_id': entree_id})
-        if rowcount == 0:
-            abort(404, message="Entree {} doesn't exist".format(entree_id))
-        else:
-            return '', 204
+@app.get("/")
+async def root():
+    return {"Hello": "World"}
 
-    def put(self, entree_id):
-        args = entree_name_parser.parse_args()
-        entree = {'entree_name': args['entree_name'], 'entree_id': entree_id}
-        rowcount = update_row("UPDATE test.entree SET entree_name = :entree_name WHERE entree_id = :entree_id", entree)
-        if (rowcount == 0):
-            abort(404, message="Entree {} doesn't exist".format(entree_id))
-        else:
-            return entree, 201
+@app.post('/entrees', response_model=Entree, status_code=201, tags=["entrees"])
+async def create_entree(entree: NewEntree):
+    """
+    Create an entree
+    - **entree_name**: each entree must have a name
+    """
+    entree_id = insert_row("INSERT INTO test.entree (entree_name) VALUES (:entree_name) RETURNING entree_id", entree.dict())
 
-# EntreeList
-# shows a list of all entrees, and lets you POST to add new entrees
-class EntreeList(Resource):
-    def get(self):
-        rows = simple_query('SELECT * FROM test.entree')
-        return rows
+    return Entree(entree_id=entree_id, entree_name=entree.entree_name)
 
-    def post(self):
-        args = entree_name_parser.parse_args()
-        entree_name = args['entree_name']
-        entree_id = insert_row("INSERT INTO test.entree (entree_name) VALUES (:entree_name) RETURNING entree_id", {'entree_name': entree_name})
-        return {'entree_id': entree_id, 'entree_name': entree_name}, 201
+@app.get('/entrees', response_model=List[Entree], tags=["entrees"])
+async def get_entrees():
+    """
+    Get all of the entrees
+    """
+    rows = simple_query('SELECT * FROM test.entree')
+    return rows
 
-##
-## Actually setup the Api resource routing here
-##
-api.add_resource(EntreeList, '/entrees/')
-api.add_resource(Entree, '/entrees/<entree_id>')
+@app.get('/entree/<entree_id>', response_model=Entree, tags=["entrees"])
+async def get_entree(entree_id):
+    """
+    Get an entree by id
+    - **entree_id**: the unique id of the entree
+    """
+    rows = simple_query('SELECT * FROM test.entree WHERE entree_id = :entree_id', {'entree_id': entree_id})
+    if (len(rows) == 0):
+        raise HTTPException(status_code=404, detail="Entree {} doesn't exist".format(entree_id))
+    else:
+        return rows[0]
 
-if __name__ == '__main__':
-    application.run(debug=True)
+@app.delete('/entree/<entree_id>', status_code=204, tags=["entrees"])
+async def delete_entree(entree_id):
+    """
+    Delete an entree
+    - **entree_id**: the unique id of the entree
+    """ 
+    rowcount = delete_row('DELETE FROM test.entree WHERE entree_id = :entree_id', {'entree_id': entree_id})
+    if rowcount == 0:
+        raise HTTPException(status_code=404, detail="Entree {} doesn't exist".format(entree_id))
+    else:
+        return ''
+
+@app.put('/entree/<entree_id>', response_model=Entree, status_code=201, tags=["entrees"])
+async def update_entree(entree_id:int, entree: Entree):
+    """
+    Update an entree
+    - **entree_id**: the unique id of the entree
+    - **entree_name**: update the name of the entree
+    """
+    rowcount = update_row("UPDATE test.entree SET entree_name = :entree_name WHERE entree_id = :entree_id", entree.dict())
+    if (rowcount == 0):
+        raise HTTPException(status_code=404, detail="Entree {} doesn't exist".format(entree_id))
+    else:
+        return entree
