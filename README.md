@@ -4,7 +4,7 @@
 
 # bento-box
 
-A flask developer's box of goodies.
+A python web developer's box of goodies.
 
 <a href="https://www.buymeacoffee.com/humanitydriven"><img src="https://img.shields.io/badge/buymeacoffee- -brightgreen" alt="code-size"/></a><img src="https://img.shields.io/github/languages/code-size/johnzech/bento-box" alt="code-size"/><a href="LICENSE"><img src="https://img.shields.io/github/license/johnzech/bento-box.svg" alt="license" /></a>
 
@@ -67,13 +67,14 @@ vagrant up
 Gets you...
 * almalinux
 * all rpms updated
-* python36 installed
-* flask installed
+* python38 installed
+* fastapi installed
+* hypercorn installed
 * postgres 13 and postgis 3 installed
     * also a starter database called 'bento' and a schema called test
 * migra installed
 * empty 'root_app' module listening on the '/' path
-* hello world flask app installed and configured in nginx
+* hello world fastapi app installed and configured in nginx
 * example api module installed (with an actual database schema behind it)
 
 ### Creating a new module
@@ -81,11 +82,11 @@ Gets you...
 1. create a new dir in the root of this repo (/carbs/)
 2. make sure it has the following (probably best to copy one of the examples)
     * \_\_init\_\_.py (empty - if you're reading this in an editor... otherwise known as __init__.py)
-    * carbs.py (main flask app here)
-    * carbs.ini (uwsgi config items)
+    * carbs.py (main fastapi app here)
+    * carbs.toml ( hypercorn config items)
     * carbs.service (systemd service file)
-    * wsgi.py (boilerplate - a bootstrapper for uwsgi to point to)
-    * carbs.conf (nginx config file - be sure to change a few references)
+    * carbs_conf_d.conf (nginx config file (conf.d dir) - loaded outside of the server directive)
+    * carbs.conf (nginx config file (default.d dir) - loaded inside of the server directive)
     * ./templates/ dir (optional, if your module has a web ui)
 **If copy/pasting, make sure to review each of the above files
 3. add a line to /provision/modules.sh for your new carbs module
@@ -127,7 +128,6 @@ tree
 
 ```sh
 .
-├── install.sh
 ├── config.py
 ├── crons
 │   ├── crontab
@@ -140,54 +140,64 @@ tree
 │   └── test_schema.sql
 ├── example_api
 │   ├── example_api.conf
-│   ├── example_api.ini
+│   ├── example_api_conf_d.conf
 │   ├── example_api.py
 │   ├── example_api.service
-│   ├── __init__.py
-│   └── wsgi.py
+│   ├── example_api.toml
+│   └── __init__.py
 ├── generate_putty_key.bat
 ├── hello_world
 │   ├── hello_world.conf
-│   ├── hello_world.ini
+│   ├── hello_world_conf_d.conf
 │   ├── hello_world.py
 │   ├── hello_world.service
+│   ├── hello_world.toml
 │   ├── __init__.py
-│   ├── templates
-│   │   └── entrees.html
-│   └── wsgi.py
+│   └── templates
+│       └── hello_world.html
 ├── __init__.py
+├── install.sh
 ├── LICENSE
+├── provision
+│   ├── crons.sh
+│   ├── dev_env.sh
+│   ├── enable_ssl.sh
+│   ├── modules.sh
+│   ├── nginx_conf
+│   ├── nginx.sh
+│   ├── packages.sh
+│   ├── postgres.sh
+│   ├── schemas.sh
+│   └── static.conf
 ├── README.md
 ├── root_app
 │   ├── __init__.py
 │   ├── root_app.conf
-│   ├── root_app.ini
+│   ├── root_app_conf_d.conf
 │   ├── root_app.py
 │   ├── root_app.service
+│   ├── root_app.toml
 │   ├── templates
 │   │   ├── base_template.html
 │   │   └── index.html
 │   └── wsgi.py
 ├── static
+│   ├── css
+│   │   └── root.css
 │   ├── favicon.ico
 │   └── image
 │       ├── Bento.png
 │       └── title_logo.png
 ├── utils
 │   ├── db.py
-│   └── __init__.py
-├── Vagrantfile
-└── provision
-    ├── crons.sh
-    ├── dev_env.sh
-    ├── modules.sh
-    ├── nginx.sh
-    ├── packages.sh
-    ├── postgres.sh
-    ├── schemas.sh
-    └── static.conf
-
-12 directories, 47 files
+│   ├── __init__.py
+│   └── __pycache__
+│       ├── db.cpython-36.pyc
+│       ├── db.cpython-38.pyc
+│       ├── __init__.cpython-36.pyc
+│       └── __init__.cpython-38.pyc
+└── Vagrantfile
+14 directories, 55 files
 ```
 
 ### Note on db versioning/migrations

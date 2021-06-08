@@ -4,17 +4,17 @@
 </head>
 <body>
     <h1 style='color:red'>Hello World</h1>
-    <p>This is a sample flask app served at /hello_world/.</p>
+    <p>This is a sample fastapi app (using jinja2 templating) served at /hello_world/.</p>
     <p>
-        Create more like it by copying the following:
-        <ul>
+        Create more like it...
+        <ol>
             <li>Copy hello_world dir, change hello_world references.</li>
             <li>Edit /provision/modules.sh and add a few lines</li>
-            <li>Copy/paste hello_world.conf in /nginx_confs/, edit accordingly</li>
-        </ul>
+            <li>Run /provision/modules.sh (via ssh, use sudo)</li>
+        </ol>
     </p>
-    <h2>Another example page</h2>
-    <p><a href="/hello_world/items/{{ id }}">Item ID: {{ id }}</a></p>
+    <h2>Another example module...</h2>
+    <p><a href="/example_api/docs">Example API</a></p>
 
 </body>
 </html>

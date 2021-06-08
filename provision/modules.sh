@@ -10,7 +10,7 @@ mkdir -p /var/www/modules
 
 for module_name in "${modules[@]}"
 do
-    # install the nginx conf file (nginx will load /etc/nginx/default.d/*.conf by default)
+    # install the default.d nginx conf file (nginx will load /etc/nginx/default.d/*.conf by default)
     cp /var/www/modules/${module_name}/${module_name}.conf /etc/nginx/default.d/
     # install the conf.d nginx conf file (nginx will load /etc/nginx/conf.d/*.conf by default)
     cp /var/www/modules/${module_name}/${module_name}_conf_d.conf /etc/nginx/conf.d/${module_name}.conf
