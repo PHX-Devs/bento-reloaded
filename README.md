@@ -10,19 +10,26 @@ A python web developer's box of goodies.
 
 ## Table of Contents
 
+* [Getting Started](#getting-started)
 * [Setup](#setup)
   * [Set up the Vagrant Box](#set-up-the-vagrant-box)
   * [SSH to the machine](#ssh-to-the-machine)
   * [Putty setup (optional)](#putty-setup-(optional))
   * [Install on AWS, Google, Digital Ocean, etc](#install-on-aws,-google,-digital-ocean,-etc)
-* [Get Started](#get-started)
+* [Build Something Neat](#build-something-neat)
   * [Vagrant up gets you...](#vagrant-up-gets-you...)
   * [Creating a new module](#creating-a-new-module)
   * [Creating a new db schema](#creating-a-new-db-schema)
   * [Creating a new cron job](#creating-a-new-cron-job)
-* [Architecture](#architecture)
-* [Note on db versioning/migrations](#note-on-db-versioning/migrations)
-* [License](#license)
+  * [Note on db versioning/migrations](#note-on-db-versioning/migrations)
+* [Other Deets](#other-deets)
+  * [Architecture](#architecture)
+  * [License](#license)
+
+## Getting Started
+Bento is a "template repository." To build something using Bento, use it as a template to create your own repository with all of the same files (but without the git commit history and branches). Click the "use this template" button in github or [click here](https://github.com/PHX-Devs/bento-reloaded/generate).
+
+Once you have your own repo, clone it locally as you normally would and continue to the setup steps below. Once installed, you'll be ready to build something neat within Bento!
 
 ## Setup
 
@@ -58,7 +65,8 @@ To Convert:
 2. clone repo in /var/www/modules 
 2. run `install.sh` 
 
-## Get Started
+## Build Something Neat
+Once installed, explore the built-in examples and build something of your own!
 
 ### What you get  
 ```sh 
@@ -117,6 +125,12 @@ Gets you...
     * in our case `*/1 * * * * cd /var/www/modules/crons/carbs && /bin/python3 /var/www/modules/crons/carbs/carbs.py >> /var/log/carbs/carbs.log`
 4. add a line to `/provision/crons.sh` 
     * `crons+=(carbs)`
+
+### Note on db versioning/migrations
+Bento does not solve for db versioning at the moment. But it does include migra, a db diff tool. That's a good start toward a sane db "non-versioning" scheme.
+Read up on it here: https://djrobstep.com/docs/migra/quickstart
+
+## Other Deets
 
 ### Architecture
 
@@ -199,10 +213,6 @@ tree
 └── Vagrantfile
 14 directories, 55 files
 ```
-
-### Note on db versioning/migrations
-bento-box does not solve for db versioning at the moment. But it does include migra, a db diff tool. That's a good start toward a sane db "non-versioning" scheme.
-Read up on it here: https://djrobstep.com/docs/migra/quickstart
 
 ### License
 [MIT](LICENSE) © John Zechlin
