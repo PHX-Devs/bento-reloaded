@@ -1,9 +1,12 @@
 import sys
+import logging
 sys.path.append('..')
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
 from config import conf
+
+log = logging.getLogger(__name__)
 
 def simple_query(query_string, args={}):
     engine = create_engine(conf['db_string'])
