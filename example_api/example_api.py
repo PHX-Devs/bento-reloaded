@@ -1,4 +1,5 @@
 import sys
+import logging
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -18,6 +19,9 @@ app = FastAPI(
     version="1.0.0",
     openapi_tags=tags_metadata
 )
+
+logging.basicConfig(filename='/var/log/bento/example_api.log', level=logging.DEBUG)
+log = logging.getLogger(__name__)
 
 class NewEntree(BaseModel):
     entree_name:str
